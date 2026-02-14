@@ -1,0 +1,105 @@
+package id.hanifalfaqih.dicodingevent_submissionbfaa.ui.detail
+
+import android.content.Intent
+import android.os.Bundle
+import android.text.Html
+import android.view.View
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
+import com.bumptech.glide.Glide
+import id.hanifalfaqih.dicodingevent_submissionbfaa.R
+import id.hanifalfaqih.dicodingevent_submissionbfaa.data.remote.response.EventItem
+import id.hanifalfaqih.dicodingevent_submissionbfaa.data.remote.retrofit.ApiConfig
+import id.hanifalfaqih.dicodingevent_submissionbfaa.data.repository.EventRepository
+import id.hanifalfaqih.dicodingevent_submissionbfaa.databinding.ActivityDetailBinding
+import id.hanifalfaqih.dicodingevent_submissionbfaa.ui.ViewModelFactory
+import id.hanifalfaqih.dicodingevent_submissionbfaa.utils.Result
+
+class DetailActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityDetailBinding
+
+    private val viewModel: DetailViewModel by viewModels {
+        ViewModelFactory.getInstance(EventRepository.getInstance(ApiConfig.getApiService()))
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        val eventId = intent.getIntExtra(EXTRA_EVENT_ID, -1)
+        if (eventId != -1) {
+            viewModel.loadEventDetail(eventId)
+            observeViewModel()
+        }
+    }
+
+    private fun observeViewModel() {
+        viewModel.eventDetail.observe(this) { result -> handleEventDetailResult(result) }
+    }
+
+    private fun handleEventDetailResult(result: Result<EventItem>) {
+        when (result) {
+            is Result.Loading -> {
+                binding.progressBar.visibility = View.VISIBLE
+                binding.layoutContent.visibility = View.GONE
+                binding.tvError.visibility = View.GONE
+            }
+            is Result.Success -> {
+                binding.progressBar.visibility = View.GONE
+                binding.layoutContent.visibility = View.VISIBLE
+                binding.tvError.visibility = View.GONE
+                displayEventDetail(result.data)
+            }
+            is Result.Error -> {
+                binding.progressBar.visibility = View.GONE
+                binding.layoutContent.visibility = View.GONE
+                binding.tvError.visibility = View.VISIBLE
+                binding.tvError.text = result.error
+            }
+        }
+    }
+
+    private fun displayEventDetail(event: EventItem) {
+        binding.apply {
+            Glide.with(this@DetailActivity)
+                .load(event.mediaCover)
+                .placeholder(R.drawable.ic_launcher_foreground)
+                .error(R.drawable.ic_launcher_foreground)
+                .into(ivEventImage)
+
+            tvEventName.text = event.name
+            tvEventOwner.text = getString(R.string.owner_format, event.ownerName)
+            tvEventTime.text = getString(R.string.time_format, event.beginTime)
+
+            val remainingQuota = event.quota - event.registrants
+            tvEventQuota.text = getString(R.string.quota_format, remainingQuota)
+
+            val description =
+                Html.fromHtml(event.description, Html.FROM_HTML_MODE_LEGACY)
+            tvEventDescription.text = description
+
+            btnRegister.setOnClickListener {
+                openEventLink(event.link)
+            }
+        }
+    }
+
+    private fun openEventLink(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+        startActivity(intent)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressedDispatcher.onBackPressed()
+        return true
+    }
+
+    companion object {
+        const val EXTRA_EVENT_ID = "extra_event_id"
+    }
+}
