@@ -18,7 +18,9 @@ import id.hanifalfaqih.dicodingevent_submissionbfaa.utils.loadImage
 
 class DetailActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityDetailBinding
+    private val binding by lazy {
+        ActivityDetailBinding.inflate(layoutInflater)
+    }
     private var isFavorite = false
     private var currentEvent: EventItem? = null
 
@@ -28,7 +30,6 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
