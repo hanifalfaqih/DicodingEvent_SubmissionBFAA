@@ -5,8 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import id.hanifalfaqih.dicodingevent_submissionbfaa.R
 import id.hanifalfaqih.dicodingevent_submissionbfaa.data.local.entity.FavoriteEventEntity
 import id.hanifalfaqih.dicodingevent_submissionbfaa.databinding.ItemFavoriteEventBinding
 import id.hanifalfaqih.dicodingevent_submissionbfaa.utils.loadImage
