@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import id.hanifalfaqih.dicodingevent_submissionbfaa.R
 import id.hanifalfaqih.dicodingevent_submissionbfaa.data.remote.response.EventItem
 import id.hanifalfaqih.dicodingevent_submissionbfaa.databinding.ItemEventHorizontalBinding
+import id.hanifalfaqih.dicodingevent_submissionbfaa.utils.loadImage
 
 class HorizontalEventAdapter(private val onItemClick: (EventItem) -> Unit) :
     ListAdapter<EventItem, HorizontalEventAdapter.EventViewHolder>(DIFF_CALLBACK) {
@@ -31,9 +32,7 @@ class HorizontalEventAdapter(private val onItemClick: (EventItem) -> Unit) :
             binding.apply {
                 tvEventName.text = event.name
 
-                Glide.with(itemView.context).load(event.mediaCover)
-                    .placeholder(R.drawable.ic_launcher_foreground)
-                    .error(R.drawable.ic_launcher_foreground).into(ivEventImage)
+                ivEventImage.loadImage(event.mediaCover)
 
                 root.setOnClickListener {
                     onItemClick(event)

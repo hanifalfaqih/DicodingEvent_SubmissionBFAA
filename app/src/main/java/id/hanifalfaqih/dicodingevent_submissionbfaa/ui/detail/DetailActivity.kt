@@ -8,13 +8,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import com.bumptech.glide.Glide
 import id.hanifalfaqih.dicodingevent_submissionbfaa.R
 import id.hanifalfaqih.dicodingevent_submissionbfaa.data.remote.response.EventItem
 import id.hanifalfaqih.dicodingevent_submissionbfaa.databinding.ActivityDetailBinding
 import id.hanifalfaqih.dicodingevent_submissionbfaa.di.Injection
 import id.hanifalfaqih.dicodingevent_submissionbfaa.ui.ViewModelFactory
 import id.hanifalfaqih.dicodingevent_submissionbfaa.utils.Result
+import id.hanifalfaqih.dicodingevent_submissionbfaa.utils.loadImage
 
 class DetailActivity : AppCompatActivity() {
 
@@ -76,11 +76,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun displayEventDetail(event: EventItem) {
         binding.apply {
-            Glide.with(this@DetailActivity)
-                .load(event.mediaCover)
-                .placeholder(R.drawable.ic_launcher_foreground)
-                .error(R.drawable.ic_launcher_foreground)
-                .into(ivEventImage)
+            ivEventImage.loadImage(event.mediaCover)
 
             tvEventName.text = event.name
             tvEventOwner.text = getString(R.string.owner_format, event.ownerName)
