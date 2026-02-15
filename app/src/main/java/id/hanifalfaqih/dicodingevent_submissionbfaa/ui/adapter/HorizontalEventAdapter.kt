@@ -15,9 +15,7 @@ class HorizontalEventAdapter(private val onItemClick: (EventItem) -> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val binding = ItemEventHorizontalBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
+            LayoutInflater.from(parent.context), parent, false
         )
         return EventViewHolder(binding)
     }
@@ -33,11 +31,9 @@ class HorizontalEventAdapter(private val onItemClick: (EventItem) -> Unit) :
             binding.apply {
                 tvEventName.text = event.name
 
-                Glide.with(itemView.context)
-                    .load(event.mediaCover)
+                Glide.with(itemView.context).load(event.mediaCover)
                     .placeholder(R.drawable.ic_launcher_foreground)
-                    .error(R.drawable.ic_launcher_foreground)
-                    .into(ivEventImage)
+                    .error(R.drawable.ic_launcher_foreground).into(ivEventImage)
 
                 root.setOnClickListener {
                     onItemClick(event)

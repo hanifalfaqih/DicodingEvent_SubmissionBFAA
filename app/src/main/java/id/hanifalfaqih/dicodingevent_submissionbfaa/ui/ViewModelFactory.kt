@@ -22,21 +22,27 @@ class ViewModelFactory private constructor(
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
                 HomeViewModel(repository) as T
             }
+
             modelClass.isAssignableFrom(UpcomingViewModel::class.java) -> {
                 UpcomingViewModel(repository) as T
             }
+
             modelClass.isAssignableFrom(FinishedViewModel::class.java) -> {
                 FinishedViewModel(repository) as T
             }
+
             modelClass.isAssignableFrom(DetailViewModel::class.java) -> {
                 DetailViewModel(repository) as T
             }
+
             modelClass.isAssignableFrom(FavoriteViewModel::class.java) -> {
                 FavoriteViewModel(repository) as T
             }
+
             modelClass.isAssignableFrom(SettingViewModel::class.java) -> {
                 SettingViewModel(settingPreferences!!) as T
             }
+
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
     }

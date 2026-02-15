@@ -86,12 +86,14 @@ class HomeFragment : Fragment() {
                 binding.rvUpcomingEvents.visibility = View.GONE
                 binding.tvUpcomingError.visibility = View.GONE
             }
+
             is Result.Success -> {
                 binding.progressUpcoming.visibility = View.GONE
                 binding.rvUpcomingEvents.visibility = View.VISIBLE
                 binding.tvUpcomingError.visibility = View.GONE
                 upcomingAdapter.submitList(result.data)
             }
+
             is Result.Error -> {
                 binding.progressUpcoming.visibility = View.GONE
                 binding.rvUpcomingEvents.visibility = View.GONE
@@ -108,12 +110,14 @@ class HomeFragment : Fragment() {
                 binding.rvFinishedEvents.visibility = View.GONE
                 binding.tvFinishedError.visibility = View.GONE
             }
+
             is Result.Success -> {
                 binding.progressFinished.visibility = View.GONE
                 binding.rvFinishedEvents.visibility = View.VISIBLE
                 binding.tvFinishedError.visibility = View.GONE
                 finishedAdapter.submitList(result.data)
             }
+
             is Result.Error -> {
                 binding.progressFinished.visibility = View.GONE
                 binding.rvFinishedEvents.visibility = View.GONE

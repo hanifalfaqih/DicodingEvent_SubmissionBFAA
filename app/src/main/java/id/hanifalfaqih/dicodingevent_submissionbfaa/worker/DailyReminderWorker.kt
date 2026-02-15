@@ -1,4 +1,5 @@
 package id.hanifalfaqih.dicodingevent_submissionbfaa.worker
+
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -13,6 +14,7 @@ import id.hanifalfaqih.dicodingevent_submissionbfaa.R
 import id.hanifalfaqih.dicodingevent_submissionbfaa.data.remote.retrofit.ApiConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+
 class DailyReminderWorker(
     context: Context,
     workerParams: WorkerParameters
@@ -30,11 +32,12 @@ class DailyReminderWorker(
                     )
                 }
                 Result.success()
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 Result.failure()
             }
         }
     }
+
     private fun showNotification(title: String, message: String) {
         val notificationManager =
             applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -63,6 +66,7 @@ class DailyReminderWorker(
         }
         notificationManager.notify(NOTIFICATION_ID, notification)
     }
+
     companion object {
         private const val CHANNEL_ID = "daily_reminder_channel"
         private const val CHANNEL_NAME = "Daily Reminder"

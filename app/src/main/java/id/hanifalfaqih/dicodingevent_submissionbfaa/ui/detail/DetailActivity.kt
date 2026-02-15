@@ -56,6 +56,7 @@ class DetailActivity : AppCompatActivity() {
                 binding.layoutContent.visibility = View.GONE
                 binding.tvError.visibility = View.GONE
             }
+
             is Result.Success -> {
                 binding.progressBar.visibility = View.GONE
                 binding.layoutContent.visibility = View.VISIBLE
@@ -63,6 +64,7 @@ class DetailActivity : AppCompatActivity() {
                 currentEvent = result.data
                 displayEventDetail(result.data)
             }
+
             is Result.Error -> {
                 binding.progressBar.visibility = View.GONE
                 binding.layoutContent.visibility = View.GONE

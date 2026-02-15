@@ -30,7 +30,11 @@ class UpcomingFragment : Fragment() {
         ViewModelFactory.getInstance(Injection.provideEventRepository(requireContext()))
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentUpcomingBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -84,12 +88,14 @@ class UpcomingFragment : Fragment() {
                 binding.rvEvents.visibility = View.GONE
                 binding.tvError.visibility = View.GONE
             }
+
             is Result.Success -> {
                 binding.progressBar.visibility = View.GONE
                 binding.rvEvents.visibility = View.VISIBLE
                 binding.tvError.visibility = View.GONE
                 eventAdapter.submitList(result.data)
             }
+
             is Result.Error -> {
                 binding.progressBar.visibility = View.GONE
                 binding.rvEvents.visibility = View.GONE

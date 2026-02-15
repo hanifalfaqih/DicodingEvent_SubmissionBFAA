@@ -1,4 +1,5 @@
 package id.hanifalfaqih.dicodingevent_submissionbfaa.ui.favorite
+
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import id.hanifalfaqih.dicodingevent_submissionbfaa.di.Injection
 import id.hanifalfaqih.dicodingevent_submissionbfaa.ui.ViewModelFactory
 import id.hanifalfaqih.dicodingevent_submissionbfaa.ui.adapter.FavoriteEventAdapter
 import id.hanifalfaqih.dicodingevent_submissionbfaa.ui.detail.DetailActivity
+
 class FavoriteFragment : Fragment() {
     private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!!
@@ -27,11 +29,13 @@ class FavoriteFragment : Fragment() {
         _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         observeFavoriteEvents()
     }
+
     private fun setupRecyclerView() {
         adapter = FavoriteEventAdapter(
             onItemClick = { event ->
@@ -46,6 +50,7 @@ class FavoriteFragment : Fragment() {
         binding.rvFavoriteEvents.layoutManager = LinearLayoutManager(requireContext())
         binding.rvFavoriteEvents.adapter = adapter
     }
+
     private fun observeFavoriteEvents() {
         viewModel.favoriteEvents.observe(viewLifecycleOwner) { events ->
             if (events.isEmpty()) {
@@ -58,6 +63,7 @@ class FavoriteFragment : Fragment() {
             }
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
