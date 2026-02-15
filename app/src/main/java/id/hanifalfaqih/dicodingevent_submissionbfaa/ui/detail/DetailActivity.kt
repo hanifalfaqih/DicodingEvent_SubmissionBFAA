@@ -6,22 +6,24 @@ import android.text.Html
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import id.hanifalfaqih.dicodingevent_submissionbfaa.R
 import id.hanifalfaqih.dicodingevent_submissionbfaa.data.remote.response.EventItem
-import id.hanifalfaqih.dicodingevent_submissionbfaa.data.remote.retrofit.ApiConfig
-import id.hanifalfaqih.dicodingevent_submissionbfaa.data.repository.EventRepository
 import id.hanifalfaqih.dicodingevent_submissionbfaa.databinding.ActivityDetailBinding
+import id.hanifalfaqih.dicodingevent_submissionbfaa.di.Injection
 import id.hanifalfaqih.dicodingevent_submissionbfaa.ui.ViewModelFactory
 import id.hanifalfaqih.dicodingevent_submissionbfaa.utils.Result
 
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
+    private var isFavorite = false
+    private var currentEvent: EventItem? = null
 
     private val viewModel: DetailViewModel by viewModels {
-        ViewModelFactory.getInstance(EventRepository.getInstance(ApiConfig.getApiService()))
+        ViewModelFactory.getInstance(Injection.provideEventRepository(this))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,12 +36,17 @@ class DetailActivity : AppCompatActivity() {
         val eventId = intent.getIntExtra(EXTRA_EVENT_ID, -1)
         if (eventId != -1) {
             viewModel.loadEventDetail(eventId)
-            observeViewModel()
+            observeViewModel(eventId)
         }
     }
 
-    private fun observeViewModel() {
+    private fun observeViewModel(eventId: Int) {
         viewModel.eventDetail.observe(this) { result -> handleEventDetailResult(result) }
+
+        viewModel.isFavorite(eventId).observe(this) { favorite ->
+            isFavorite = favorite
+            updateFavoriteButton()
+        }
     }
 
     private fun handleEventDetailResult(result: Result<EventItem>) {
@@ -53,6 +60,7 @@ class DetailActivity : AppCompatActivity() {
                 binding.progressBar.visibility = View.GONE
                 binding.layoutContent.visibility = View.VISIBLE
                 binding.tvError.visibility = View.GONE
+                currentEvent = result.data
                 displayEventDetail(result.data)
             }
             is Result.Error -> {
@@ -86,6 +94,26 @@ class DetailActivity : AppCompatActivity() {
             btnRegister.setOnClickListener {
                 openEventLink(event.link)
             }
+
+            fabFavorite.setOnClickListener {
+                if (isFavorite) {
+                    viewModel.removeFromFavorite(event.id)
+                } else {
+                    viewModel.addToFavorite(event)
+                }
+            }
+        }
+    }
+
+    private fun updateFavoriteButton() {
+        if (isFavorite) {
+            binding.fabFavorite.setImageDrawable(
+                ContextCompat.getDrawable(this, R.drawable.ic_favorite)
+            )
+        } else {
+            binding.fabFavorite.setImageDrawable(
+                ContextCompat.getDrawable(this, R.drawable.ic_favorite_border)
+            )
         }
     }
 

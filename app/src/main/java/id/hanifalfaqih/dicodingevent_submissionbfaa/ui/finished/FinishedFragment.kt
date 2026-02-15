@@ -12,9 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import id.hanifalfaqih.dicodingevent_submissionbfaa.data.remote.response.EventItem
-import id.hanifalfaqih.dicodingevent_submissionbfaa.data.remote.retrofit.ApiConfig
-import id.hanifalfaqih.dicodingevent_submissionbfaa.data.repository.EventRepository
 import id.hanifalfaqih.dicodingevent_submissionbfaa.databinding.FragmentFinishedBinding
+import id.hanifalfaqih.dicodingevent_submissionbfaa.di.Injection
 import id.hanifalfaqih.dicodingevent_submissionbfaa.ui.ViewModelFactory
 import id.hanifalfaqih.dicodingevent_submissionbfaa.ui.adapter.EventAdapter
 import id.hanifalfaqih.dicodingevent_submissionbfaa.ui.detail.DetailActivity
@@ -28,7 +27,7 @@ class FinishedFragment : Fragment() {
     private lateinit var eventAdapter: EventAdapter
 
     private val viewModel: FinishedViewModel by viewModels {
-        ViewModelFactory.getInstance(EventRepository.getInstance(ApiConfig.getApiService()))
+        ViewModelFactory.getInstance(Injection.provideEventRepository(requireContext()))
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

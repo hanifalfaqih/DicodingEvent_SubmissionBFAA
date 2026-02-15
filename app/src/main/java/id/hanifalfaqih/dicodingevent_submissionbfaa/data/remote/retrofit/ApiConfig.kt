@@ -1,5 +1,6 @@
 package id.hanifalfaqih.dicodingevent_submissionbfaa.data.remote.retrofit
 
+import id.hanifalfaqih.dicodingevent_submissionbfaa.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -10,7 +11,12 @@ object ApiConfig {
     private const val BASE_URL = "https://event-api.dicoding.dev/"
 
     fun getApiService(): ApiService {
-        val loggingInterceptor =   HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        val loggingLevel = when (BuildConfig.LOGGING_LEVEL) {
+            "BODY" -> HttpLoggingInterceptor.Level.BODY
+            else -> HttpLoggingInterceptor.Level.NONE
+        }
+
+        val loggingInterceptor = HttpLoggingInterceptor().setLevel(loggingLevel)
 
         val client = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
